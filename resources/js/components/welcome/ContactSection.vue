@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import { Github, Linkedin, Instagram, Send, CheckCircle } from 'lucide-vue-next';
 
@@ -21,26 +21,35 @@ const form = ref({ name: '', email: '', message: '', website: '', recaptcha_toke
 const sending = ref(false);
 const sent = ref(false);
 const errors = ref<Record<string, string>>({});
-const siteKey = usePage().props.recaptcha_site_key as string | undefined;
+const page = usePage();
+const siteKey = computed(() => page.props.recaptcha_site_key as string | undefined);
 
 onMounted(() => {
-    if (siteKey) {
-        // Load reCAPTCHA script
+    loadRecaptcha();
+});
+
+watch(siteKey, () => {
+    loadRecaptcha();
+});
+
+function loadRecaptcha() {
+    if (siteKey.value && !document.getElementById('recaptcha-script')) {
         const script = document.createElement('script');
-        script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
+        script.id = 'recaptcha-script';
+        script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey.value}`;
         script.async = true;
         document.head.appendChild(script);
     }
-});
+}
 
 async function submitForm() {
     sending.value = true;
     errors.value = {};
 
-    if (siteKey && (window as any).grecaptcha) {
+    if (siteKey.value && (window as any).grecaptcha) {
         (window as any).grecaptcha.ready(async () => {
             try {
-                const token = await (window as any).grecaptcha.execute(siteKey, { action: 'submit' });
+                const token = await (window as any).grecaptcha.execute(siteKey.value, { action: 'submit' });
                 form.value.recaptcha_token = token;
                 await sendRequest();
             } catch (e) {
@@ -209,6 +218,12 @@ function getCsrfToken(): string {
                         {{ contactSend }} <Send class="h-3.5 w-3.5" />
                     </template>
                 </button>
+                
+                <p v-if="siteKey" class="text-center text-[10px] text-stone-400 mt-4 leading-relaxed">
+                    This site is protected by reCAPTCHA and the Google
+                    <a href="https://policies.google.com/privacy" class="text-stone-500 hover:text-stone-700 underline" target="_blank">Privacy Policy</a> and
+                    <a href="https://policies.google.com/terms" class="text-stone-500 hover:text-stone-700 underline" target="_blank">Terms of Service</a> apply.
+                </p>
             </form>
         </div>
     </div>

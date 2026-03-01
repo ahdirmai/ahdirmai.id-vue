@@ -31,6 +31,7 @@ class SeoSettingController extends Controller
             'meta_description' => ['nullable', 'string'],
             'meta_keywords' => ['nullable', 'string', 'max:255'],
             'og_image_file' => ['nullable', 'image', 'max:5120'],
+            'favicon_file' => ['nullable', 'image', 'max:2048', 'mimes:ico,png,svg,jpg,jpeg'],
         ]);
 
         $data = [
@@ -46,6 +47,13 @@ class SeoSettingController extends Controller
                 Storage::disk('public')->delete($seo->og_image_path);
             }
             $data['og_image_path'] = $request->file('og_image_file')->store('seo', 'public');
+        }
+
+        if ($request->hasFile('favicon_file')) {
+            if ($seo->favicon_path && Storage::disk('public')->exists($seo->favicon_path)) {
+                Storage::disk('public')->delete($seo->favicon_path);
+            }
+            $data['favicon_path'] = $request->file('favicon_file')->store('seo', 'public');
         }
 
         $seo->update($data);
@@ -84,13 +92,13 @@ PROMPT;
         try {
             $json = $aiService->generateJson($prompt);
 
-            if (!$json) {
+            if (! $json) {
                 return response()->json(['error' => 'Failed to parse AI response.'], 500);
             }
 
             return response()->json($json);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'AI Generation failed: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'AI Generation failed: '.$e->getMessage()], 500);
         }
     }
 }

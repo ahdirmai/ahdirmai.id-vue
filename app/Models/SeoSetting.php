@@ -11,6 +11,7 @@ class SeoSetting extends Model
         'meta_description',
         'meta_keywords',
         'og_image_path',
+        'favicon_path',
     ];
 
     public static function current(): self

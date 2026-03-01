@@ -18,6 +18,7 @@ type SeoSettingType = {
     meta_description: string;
     meta_keywords: string;
     og_image_path: string;
+    favicon_path: string;
 };
 
 const props = defineProps<{
@@ -34,13 +35,16 @@ const form = useForm({
     meta_description: props.seoSetting.meta_description ?? '',
     meta_keywords: props.seoSetting.meta_keywords ?? '',
     og_image_path: props.seoSetting.og_image_path ?? '',
+    favicon_path: props.seoSetting.favicon_path ?? '',
     og_image_file: null as File | null,
+    favicon_file: null as File | null,
     _method: 'put',
 });
 
 const isGenerating = ref(false);
 const generateError = ref('');
 const previewUrl = ref<string | null>(null);
+const faviconPreviewUrl = ref<string | null>(null);
 
 function handleImageUpload(e: Event) {
     const input = e.target as HTMLInputElement;
@@ -50,6 +54,17 @@ function handleImageUpload(e: Event) {
     } else {
         form.og_image_file = null;
         previewUrl.value = null;
+    }
+}
+
+function handleFaviconUpload(e: Event) {
+    const input = e.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+        form.favicon_file = input.files[0];
+        faviconPreviewUrl.value = URL.createObjectURL(input.files[0]);
+    } else {
+        form.favicon_file = null;
+        faviconPreviewUrl.value = null;
     }
 }
 
@@ -114,17 +129,32 @@ function submit() {
                     <InputError :message="form.errors.meta_keywords" />
                 </div>
 
-                <div class="grid gap-2">
-                    <Label for="og_image_file">OG Image</Label>
-                    <div v-if="form.og_image_path && !form.og_image_file" class="mb-2">
-                        <img :src="form.og_image_path.startsWith('http') ? form.og_image_path : `/storage/${form.og_image_path}`" alt="OG Image" class="h-40 w-auto object-cover rounded shadow-sm border border-border" />
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div class="grid gap-2">
+                        <Label for="og_image_file">OG Image</Label>
+                        <div v-if="form.og_image_path && !form.og_image_file" class="mb-2">
+                            <img :src="form.og_image_path.startsWith('http') ? form.og_image_path : `/storage/${form.og_image_path}`" alt="OG Image" class="h-40 w-auto object-cover rounded shadow-sm border border-border" />
+                        </div>
+                        <div v-if="previewUrl" class="mb-2">
+                            <img :src="previewUrl" alt="OG Image Preview" class="h-40 w-auto object-cover rounded shadow-sm border border-border" />
+                        </div>
+                        <Input id="og_image_file" type="file" accept="image/*" @change="handleImageUpload" class="cursor-pointer" />
+                        <InputError :message="form.errors.og_image_file" />
+                        <p class="text-xs text-muted-foreground">Upload a new OG image (Recommended: 1200x630px).</p>
                     </div>
-                    <div v-if="previewUrl" class="mb-2">
-                        <img :src="previewUrl" alt="OG Image Preview" class="h-40 w-auto object-cover rounded shadow-sm border border-border" />
+                    
+                    <div class="grid gap-2">
+                        <Label for="favicon_file">Favicon</Label>
+                        <div v-if="form.favicon_path && !form.favicon_file" class="mb-2">
+                            <img :src="form.favicon_path.startsWith('http') ? form.favicon_path : `/storage/${form.favicon_path}`" alt="Favicon" class="h-16 w-16 object-contain rounded shadow-sm border border-border bg-stone-50 p-2" />
+                        </div>
+                        <div v-if="faviconPreviewUrl" class="mb-2">
+                            <img :src="faviconPreviewUrl" alt="Favicon Preview" class="h-16 w-16 object-contain rounded shadow-sm border border-border bg-stone-50 p-2" />
+                        </div>
+                        <Input id="favicon_file" type="file" accept=".ico,.png,.jpg,.jpeg,.svg" @change="handleFaviconUpload" class="cursor-pointer" />
+                        <InputError :message="form.errors.favicon_file" />
+                        <p class="text-xs text-muted-foreground">Upload a Favicon (.ico, .png, .svg).</p>
                     </div>
-                    <Input id="og_image_file" type="file" accept="image/*" @change="handleImageUpload" class="cursor-pointer" />
-                    <InputError :message="form.errors.og_image_file" />
-                    <p class="text-xs text-muted-foreground">Upload a new image to replace the existing one.</p>
                 </div>
 
                 <div class="flex items-center gap-4">
