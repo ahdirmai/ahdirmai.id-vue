@@ -18,6 +18,7 @@ type HeroSetting = {
     focus_text_en: string;
     years_of_experience: number;
     position_tags: string[];
+    cv_path: string | null;
 };
 
 const props = defineProps<{
@@ -37,6 +38,8 @@ const form = useForm({
     focus_text_en: props.heroSetting.focus_text_en,
     years_of_experience: props.heroSetting.years_of_experience,
     position_tags: props.heroSetting.position_tags ?? [],
+    cv_file: null as File | null,
+    _method: 'put',
 });
 
 const newTag = defineModel<string>('newTag', { default: '' });
@@ -53,7 +56,7 @@ function removeTag(index: number) {
 }
 
 function submit() {
-    form.put('/admin/hero');
+    form.post('/admin/hero');
 }
 </script>
 
@@ -102,23 +105,35 @@ function submit() {
                     <InputError :message="form.errors.years_of_experience" />
                 </div>
 
-                <div class="grid gap-2">
-                    <Label>Position Tags</Label>
-                    <div class="flex flex-wrap gap-2">
-                        <span
-                            v-for="(tag, i) in form.position_tags"
-                            :key="i"
-                            class="inline-flex items-center gap-1 rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground"
-                        >
-                            {{ tag }}
-                            <button type="button" class="ml-1 text-xs opacity-70 hover:opacity-100" @click="removeTag(i)">×</button>
-                        </span>
+                    <div class="grid gap-2">
+                        <Label>Position Tags</Label>
+                        <div class="flex flex-wrap gap-2">
+                            <span
+                                v-for="(tag, i) in form.position_tags"
+                                :key="i"
+                                class="inline-flex items-center gap-1 rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground"
+                            >
+                                {{ tag }}
+                                <button type="button" class="ml-1 text-xs opacity-70 hover:opacity-100" @click="removeTag(i)">×</button>
+                            </span>
+                        </div>
+                        <div class="flex gap-2">
+                            <Input v-model="newTag" placeholder="Add tag (e.g. Fullstack)" @keydown.enter.prevent="addTag" />
+                            <Button type="button" variant="outline" @click="addTag">Add</Button>
+                        </div>
                     </div>
-                    <div class="flex gap-2">
-                        <Input v-model="newTag" placeholder="Add tag (e.g. Fullstack)" @keydown.enter.prevent="addTag" />
-                        <Button type="button" variant="outline" @click="addTag">Add</Button>
+
+                    <div class="grid gap-2">
+                        <Label for="cv_file">Curriculum Vitae (PDF)</Label>
+                        <div v-if="heroSetting.cv_path && !form.cv_file" class="mb-2 text-sm text-blue-600">
+                            <a :href="`/storage/${heroSetting.cv_path}`" target="_blank" class="hover:underline flex items-center gap-1">
+                                Current CV uploaded
+                            </a>
+                        </div>
+                        <Input id="cv_file" type="file" accept=".pdf" @change="(e: Event) => form.cv_file = (e.target as HTMLInputElement).files?.[0] || null" class="cursor-pointer" />
+                        <InputError :message="form.errors.cv_file" />
+                        <p class="text-xs text-muted-foreground">Upload a PDF document. Max 10MB.</p>
                     </div>
-                </div>
 
                 <div class="flex items-center gap-4">
                     <Button :disabled="form.processing">Save</Button>

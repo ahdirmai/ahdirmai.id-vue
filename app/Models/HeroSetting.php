@@ -14,6 +14,7 @@ class HeroSetting extends Model
         'focus_text_en',
         'years_of_experience',
         'position_tags',
+        'cv_path',
     ];
 
     /**
@@ -36,6 +37,7 @@ class HeroSetting extends Model
             'focus_text_en' => '',
             'years_of_experience' => 0,
             'position_tags' => [],
+            'cv_path' => null,
         ]);
     }
 }

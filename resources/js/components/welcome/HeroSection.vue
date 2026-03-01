@@ -18,6 +18,7 @@ defineProps<{
     positionTags?: string[];
     linkedinUrl?: string;
     githubUrl?: string;
+    cvPath?: string | null;
 }>();
 
 const clock = ref('00:00:00 WITA');
@@ -77,7 +78,8 @@ onUnmounted(() => {
                     <div class="flex flex-wrap items-center gap-4">
                         <!-- Primary CTA -->
                         <a
-                            href="#"
+                            :href="cvPath ? `/storage/${cvPath}` : '#'"
+                            :target="cvPath ? '_blank' : undefined"
                             class="flex items-center gap-2 rounded-full bg-zinc-900 px-6 py-3.5 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-zinc-800"
                         >
                             <Download class="h-4 w-4" />

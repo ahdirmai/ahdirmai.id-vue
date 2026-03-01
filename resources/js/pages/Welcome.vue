@@ -25,6 +25,7 @@ type HeroData = {
     focus_text_en: string;
     years_of_experience: number;
     position_tags: string[];
+    cv_path: string | null;
 };
 
 type WorkExp = {
@@ -280,6 +281,7 @@ onMounted(() => {
             :position-tags="hero.position_tags"
             :linkedin-url="contact.linkedin_url"
             :github-url="contact.github_url"
+            :cv-path="hero.cv_path"
         />
 
         <!-- 2. Experience -->

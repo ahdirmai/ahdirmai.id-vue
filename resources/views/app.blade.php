@@ -35,7 +35,40 @@
 
     @php
         $seo = \App\Models\SeoSetting::current();
+        $ogImageUrl = $seo->og_image_path ? Storage::disk('public')->url($seo->og_image_path) : null;
     @endphp
+
+    {{-- Standard Meta Tags --}}
+    @if ($seo->meta_description)
+        <meta name="description" content="{{ $seo->meta_description }}">
+    @endif
+    @if ($seo->meta_keywords)
+        <meta name="keywords" content="{{ $seo->meta_keywords }}">
+    @endif
+
+    {{-- Open Graph / Facebook / LinkedIn / Discord --}}
+    <meta property="og:type" content="website">
+    @if ($seo->site_title)
+        <meta property="og:title" content="{{ $seo->site_title }}">
+    @endif
+    @if ($seo->meta_description)
+        <meta property="og:description" content="{{ $seo->meta_description }}">
+    @endif
+    @if ($ogImageUrl)
+        <meta property="og:image" content="{{ $ogImageUrl }}">
+    @endif
+
+    {{-- Twitter --}}
+    <meta name="twitter:card" content="summary_large_image">
+    @if ($seo->site_title)
+        <meta name="twitter:title" content="{{ $seo->site_title }}">
+    @endif
+    @if ($seo->meta_description)
+        <meta name="twitter:description" content="{{ $seo->meta_description }}">
+    @endif
+    @if ($ogImageUrl)
+        <meta name="twitter:image" content="{{ $ogImageUrl }}">
+    @endif
 
     @if ($seo->favicon_path)
         <link rel="icon"
