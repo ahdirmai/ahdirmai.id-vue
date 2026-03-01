@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ridha Fahmi Junaidi | Software Engineer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Instrument+Serif:ital@1&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --cream: #F5F3EE;
+            --card-bg: #FFFFFF;
+            --card-border: rgba(0, 0, 0, 0.05);
+            --dark: #18181b;
+            --accent: #d97706;
+            --accent-light: #fef3c7;
+            --text-muted: #78716c;
+            --radius-card: 2.5rem;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--cream);
+            color: var(--dark);
+            overflow-x: hidden;
+            background-image: radial-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px);
+            background-size: 28px 28px;
+        }
+
+        .serif-italic {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+        }
+
+        /* ── LANGUAGE MODAL ── */
+        #lang-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(20, 18, 14, 0.6);
+            backdrop-filter: blur(12px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #lang-modal.show {
+            display: flex;
+        }
+
+        #lang-modal .modal-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-card);
+            padding: 3rem 3.5rem;
+            max-width: 480px;
+            width: 90%;
+            box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.18);
+            text-align: center;
+        }
+
+        /* ── BENTO GRID ── */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1.25rem;
+        }
+
+        /* ── CARD BASE ── */
+        .bento-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-card);
+            padding: 2.25rem;
+            transition: all 0.5s cubic-bezier(0.2, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bento-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.07);
+        }
+
+        /* ── GLOSSY CARD ── */
+        .glossy {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.7) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .glossy-dark {
+            background: linear-gradient(135deg, rgba(28, 25, 23, 0.96) 0%, rgba(24, 24, 27, 0.88) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* ── REVEAL ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(32px);
+            transition: all 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── HERO SECTION (100vh desktop) ── */
+        #hero {
+            grid-column: 1 / -1;
+            height: 100vh;
+            min-height: 620px;
+            max-height: 1080px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* ONE big L-shaped grid area */
+        .hero-main-grid {
+            flex: 1;
+            height: 90vh;
+            /* Note: Overridden in mobile media query */
+            display: grid;
+            grid-template-columns: 1fr auto;
+            grid-template-rows: 1fr 200px;
+            min-height: 0;
+            gap: 0;
+        }
+
+        /* The big top/left background area */
+        .hero-bg-top {
+            grid-column: 1 / 3;
+            grid-row: 1 / 2;
+            background: linear-gradient(160deg, #EDEAE3 0%, #E6E2D8 100%);
+            border-radius: var(--radius-card) var(--radius-card) 0 0;
+            padding: 3rem 3.5rem 2rem 3.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 0;
+        }
+
+        /* Bottom-left extension of the big card */
+        .hero-bg-bottom-left {
+            grid-column: 1 / 2;
+            grid-row: 2 / 3;
+            background: #E6E2D8;
+            border-radius: 0 0 0 var(--radius-card);
+            padding: 1.5rem 0rem 2.5rem 3.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        /* Bottom-right inset cards (sitting in the cutout) */
+        .hero-inset-cards {
+            grid-column: 2 / 3;
+            grid-row: 2 / 3;
+            display: flex;
+            flex-direction: row;
+            gap: 1rem;
+            align-items: stretch;
+            padding: 0 0 0 1rem;
+            flex-shrink: 0;
+        }
+
+        .hero-inset-card {
+            width: 250px;
+            padding: 1.75rem;
+            background: white;
+            border-radius: 1.5rem;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 180px;
+        }
+
+        .hero-inset-card.dark {
+            background: linear-gradient(135deg, #1c1917ee 0%, #18181bdd 100%);
+            border-color: rgba(255, 255, 255, 0.06);
+        }
+
+        /* Status bar: full-width rounded pill at the bottom */
+        .hero-bar {
+            /* width: 100vw; */
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 68px;
+            background: white;
+            border-radius: 2rem;
+            display: flex;
+            align-items: center;
+            padding: 0 3.5rem;
+            gap: 1.5rem;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 1024px) {
+            #hero {
+                height: auto;
+                min-height: unset;
+                max-height: unset;
+            }
+
+            .hero-main-grid {
+                display: flex;
+                flex-direction: column;
+                height: auto;
+                /* Reset 90vh on mobile */
+                gap: 0;
+            }
+
+            .hero-bg-top {
+                border-radius: var(--radius-card) var(--radius-card) 0 0;
+                padding: 2.5rem 2rem 1.5rem 2rem;
+            }
+
+            .hero-bg-bottom-left {
+                border-radius: 0;
+                padding: 1rem 2rem 1.5rem 2rem;
+            }
+
+            .hero-inset-cards {
+                padding: 0;
+                width: 100%;
+                border-radius: 0 0 var(--radius-card) var(--radius-card);
+                overflow: hidden;
+                gap: 0;
+            }
+
+            .hero-inset-card {
+                flex: 1;
+                min-width: 0;
+                width: auto;
+                min-height: 180px;
+                border-radius: 0;
+            }
+
+            .hero-bar {
+                width: 100%;
+                left: 0;
+                transform: none;
+                border-radius: var(--radius-card);
+                height: auto;
+                padding: 1.25rem 1.5rem;
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-bg-top {
+                padding: 2rem 1.5rem 1rem 1.5rem;
+            }
+
+            .hero-bg-bottom-left {
+                padding: 0.75rem 1.5rem 1.25rem 1.5rem;
+            }
+
+            .hero-inset-cards {
+                flex-direction: row;
+                border-radius: var(--radius-card);
+                overflow: visible;
+                gap: 0.5rem;
+            }
+
+            .hero-inset-card {
+                flex: 1;
+                border-radius: var(--radius-card);
+                border: 1px solid rgba(0, 0, 0, 0.06);
+                min-height: 140px;
+                padding: 1rem;
+            }
+
+        }
+
+        /* ── EDUCATION ── */
+        .edu-grid {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+
+        @media (max-width: 640px) {
+            .edu-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ── FULL‑WIDTH SPANS ── */
+        .col-full {
+            grid-column: 1 / -1;
+        }
+
+        .col-8 {
+            grid-column: span 8;
+        }
+
+        .col-4 {
+            grid-column: span 4;
+        }
+
+        .col-6 {
+            grid-column: span 6;
+        }
+
+        @media (max-width: 1024px) {
+
+            .col-8,
+            .col-4,
+            .col-6 {
+                grid-column: 1 / -1;
+            }
+        }
+
+        /* ── TECH MARQUEE ── */
+        .marquee-wrapper {
+            overflow: hidden;
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+
+        .marquee-content {
+            display: flex;
+            gap: 3rem;
+            animation: scroll 28s linear infinite;
+        }
+
+        @keyframes scroll {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* ── PILL NAV ── */
+        .pill-nav {
+            background: rgba(24, 24, 27, 0.92);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* ── MOBILE HAMBURGER ── */
+        #hamburger-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(24, 24, 27, 0.92);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        #hamburger-btn .bar {
+            width: 18px;
+            height: 2px;
+            background: white;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+
+        #hamburger-btn.open .bar:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        #hamburger-btn.open .bar:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+
+        #hamburger-btn.open .bar:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        #mobile-menu {
+            position: fixed;
+            bottom: 72px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            z-index: 49;
+            background: rgba(24, 24, 27, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1.5rem;
+            padding: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            width: 200px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.25s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+
+        #mobile-menu.open {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        #mobile-menu a {
+            padding: 0.75rem 1.25rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        #mobile-menu a:hover,
+        #mobile-menu a.active-link {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+        }
+
+        #mobile-menu a.cta-link {
+            background: white;
+            color: #09090b;
+            text-align: center;
+            margin-top: 0.25rem;
+        }
+
+        /* ── LANG TOGGLE ── */
+        #lang-toggle {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 200;
+            background: rgba(24, 24, 27, 0.88);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            padding: 0.4rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        @media (max-width: 768px) {
+            #lang-toggle {
+                top: 1rem;
+                right: 1rem;
+                padding: 0.4rem 0.75rem;
+                font-size: 0.65rem;
+            }
+        }
+
+        /* ── PORTFOLIO GRID RESPONSIVE ── */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1.25rem;
+        }
+
+        .project-hero {
+            grid-column: span 12;
+        }
+
+        .project-second {
+            grid-column: span 12;
+        }
+
+        .project-third {
+            grid-column: span 12;
+        }
+
+        .project-fourth {
+            grid-column: span 12;
+        }
+
+        .project-fifth {
+            grid-column: span 12;
+            min-height: 120px;
+        }
+
+        @media (min-width: 768px) {
+            .project-hero {
+                grid-column: span 12;
+            }
+
+            .project-second {
+                grid-column: span 12;
+            }
+
+            .project-third {
+                grid-column: span 6;
+            }
+
+            .project-fourth {
+                grid-column: span 6;
+            }
+
+            .project-fifth {
+                grid-column: span 12;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .portfolio-grid {
+                grid-template-columns: repeat(12, 1fr);
+                gap: 1.25rem;
+            }
+
+            .project-hero {
+                grid-column: span 8;
+                grid-row: span 2;
+            }
+
+            .project-second {
+                grid-column: span 4;
+            }
+
+            .project-third {
+                grid-column: span 4;
+                grid-row: 2;
+            }
+
+            .project-fourth {
+                grid-column: span 4;
+            }
+
+            .project-fifth {
+                grid-column: span 4;
+            }
+        }
+
+        #lang-toggle:hover {
+            background: rgba(217, 119, 6, 0.9);
+        }
+
+        #lang-toggle .flag {
+            font-size: 1rem;
+        }
+
+        /* ── PORTFOLIO GRID ── */
+        .portfolio-grid {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-auto-rows: auto;
+            gap: 1.25rem;
+        }
+
+        .project-hero {
+            grid-column: 1 / 8;
+        }
+
+        .project-second {
+            grid-column: 8 / -1;
+        }
+
+        .project-third {
+            grid-column: 1 / 5;
+        }
+
+        .project-fourth {
+            grid-column: 5 / 9;
+        }
+
+        .project-fifth {
+            grid-column: 9 / -1;
+        }
+
+        @media (min-width: 1024px) {
+            .portfolio-grid {
+                grid-template-columns: repeat(12, 1fr);
+                gap: 1.25rem;
+            }
+
+            .project-hero {
+                grid-column: span 8;
+                grid-row: span 2;
+            }
+
+            .project-second {
+                grid-column: span 4;
+            }
+
+            .project-third {
+                grid-column: span 4;
+                grid-row: span 2;
+            }
+
+            .project-fourth {
+                grid-column: span 5;
+            }
+
+            .project-fifth {
+                grid-column: span 3;
+            }
+        }
+
+        /* ── GLOSSY SHINE OVERLAY ── */
+        .glossy::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, transparent 60%);
+            pointer-events: none;
+            border-radius: inherit;
+        }
+    </style>
+</head>
+
+<body class="p-4 md:p-6 lg:p-10 pb-32">
+
+    <!-- Language Modal -->
+    <div id="lang-modal">
+        <div class="modal-card">
+            <div class="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <i data-lucide="globe" class="w-7 h-7 text-amber-600"></i>
+            </div>
+            <h2 class="text-2xl font-extrabold text-zinc-900 mb-2">Choose Language</h2>
+            <p class="text-sm text-zinc-400 font-medium mb-8">Pilih bahasa tampilan / Select display language</p>
+            <div class="flex gap-4">
+                <button onclick="setLang('id')"
+                    class="flex-1 py-4 bg-zinc-950 text-white rounded-2xl font-bold text-sm hover:bg-amber-600 transition-all active:scale-95">
+                    🇮🇩 &nbsp;Bahasa Indonesia
+                </button>
+                <button onclick="setLang('en')"
+                    class="flex-1 py-4 bg-zinc-100 text-zinc-800 rounded-2xl font-bold text-sm hover:bg-amber-50 border border-black/5 transition-all active:scale-95">
+                    🇬🇧 &nbsp;English
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Language Toggle Button -->
+    <button id="lang-toggle" onclick="toggleLang()">
+        <span class="flag" id="lang-flag">🇮🇩</span>
+        <span id="lang-label">ID</span>
+    </button>
+
+    <main class="max-w-7xl mx-auto bento-grid" id="main-grid"></main>
+
+    <!-- Floating Navigation: Pill on desktop, hamburger on mobile -->
+    <nav class="fixed md:bottom-auto md:top-14 left-1/2 -translate-x-1/2 z-50 hidden md:block">
+        <div class="pill-nav flex items-center gap-1 p-1.5 rounded-full shadow-2xl">
+            <a href="#hero"
+                class="px-5 py-2 text-xs font-bold text-white/50 hover:text-white transition-all rounded-full nav-link"
+                data-key="nav_home">Beranda</a>
+            <a href="#experience"
+                class="px-5 py-2 text-xs font-bold text-white/50 hover:text-white transition-all rounded-full nav-link"
+                data-key="nav_career">Karier</a>
+            <a href="#projects"
+                class="px-5 py-2 text-xs font-bold text-white/50 hover:text-white transition-all rounded-full nav-link"
+                data-key="nav_projects">Proyek</a>
+            <a href="#contact"
+                class="px-6 py-2 text-xs bg-white text-zinc-950 rounded-full font-extrabold hover:scale-105 active:scale-95 transition-all nav-link"
+                data-key="nav_contact">Kontak</a>
+        </div>
+    </nav>
+
+    <!-- Mobile hamburger -->
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3 md:hidden">
+        <!-- Mobile menu panel -->
+        <div id="mobile-menu">
+            <a href="#hero" class="nav-link" data-key="nav_home" onclick="closeMobileMenu()">Beranda</a>
+            <a href="#experience" class="nav-link" data-key="nav_career" onclick="closeMobileMenu()">Karier</a>
+            <a href="#projects" class="nav-link" data-key="nav_projects" onclick="closeMobileMenu()">Proyek</a>
+            <a href="#contact" class="cta-link nav-link" data-key="nav_contact" onclick="closeMobileMenu()">Kontak</a>
+        </div>
+        <!-- Hamburger button -->
+        <button id="hamburger-btn" onclick="toggleMobileMenu()" aria-label="Menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+    </div>
+
+
+    <!-- PROJECT MODAL -->
+    <div id="project-modal"
+        class="fixed inset-0 z-[100] bg-zinc-950/80 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300 flex items-center justify-center p-4">
+        <!-- Close overlay -->
+        <div class="absolute inset-0 cursor-pointer" onclick="closeProjectModal()"></div>
+        <!-- Modal content -->
+        <div class="bg-white max-w-2xl w-full max-h-[90vh] overflow-y-auto rounded-[2.5rem] p-8 md:p-12 relative transform translate-y-8 transition-all duration-300 styled-scrollbar"
+            id="project-modal-content">
+            <button onclick="closeProjectModal()"
+                class="absolute top-6 right-6 w-10 h-10 bg-stone-100 rounded-full flex items-center justify-center text-stone-500 hover:bg-zinc-900 hover:text-white transition-colors z-10">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div id="modal-tag" class="text-[10px] font-black tracking-[0.3em] uppercase text-amber-600 mb-4"></div>
+            <h2 id="modal-title" class="text-3xl md:text-5xl font-extrabold tracking-tight text-zinc-900 mb-6"></h2>
+
+            <!-- Gallery -->
+            <div id="modal-gallery" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6"></div>
+
+            <p id="modal-desc" class="text-sm md:text-base text-stone-500 leading-relaxed mb-8"></p>
+            <div id="modal-tech" class="flex flex-wrap gap-2 mb-8"></div>
+            <a href="#"
+                class="inline-flex items-center gap-2 px-6 py-3.5 bg-zinc-900 text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-amber-600 active:scale-95 transition-all shadow-md">
+                Visit Project <i data-lucide="external-link" class="w-4 h-4"></i>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Project Modal logic
+        function openProjectModal(index) {
+            // Get data from portfolioData based on the JS object populated earlier
+            const project = portfolioData.projects[index];
+            const L = i18n[currentLang];
+            const desc = L.project_descs[index];
+
+            document.getElementById('modal-tag').textContent = project.tag;
+            document.getElementById('modal-title').textContent = project.title;
+            document.getElementById('modal-desc').innerHTML = desc; // allow basic HTML text in description
+
+            // Populate Gallery
+            const galleryHtml = (project.images || []).map(img => `<img src="${img}" alt="Project screenshot" class="w-full h-48 md:h-64 object-cover rounded-2xl border border-black/5 shadow-sm">`).join('');
+            document.getElementById('modal-gallery').innerHTML = galleryHtml;
+
+            const techHtml = project.tech.map(t => `<span class="px-3 py-1 border border-stone-200 text-stone-500 text-[10px] font-bold rounded-xl">${t}</span>`).join('');
+            document.getElementById('modal-tech').innerHTML = techHtml;
+
+            const modal = document.getElementById('project-modal');
+            const content = document.getElementById('project-modal-content');
+
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            content.classList.remove('translate-y-8');
+            lucide.createIcons();
+
+            // disable body scroll
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeProjectModal() {
+            const modal = document.getElementById('project-modal');
+            const content = document.getElementById('project-modal-content');
+
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            content.classList.add('translate-y-8');
+
+            setTimeout(() => {
+                document.getElementById('modal-gallery').innerHTML = ''; // clear out images so they dont flash next time
+                content.scrollTop = 0; // reset scroll position
+            }, 300);
+
+            // enable body scroll
+            document.body.style.overflow = '';
+        }
+
+        // ── i18n ──────────────────────────────────────────────────────────────────
+        const i18n = {
+            id: {
+                nav_home: 'Beranda', nav_career: 'Karier', nav_projects: 'Proyek', nav_contact: 'Kontak',
+                role: 'Software Engineer',
+                degree: 'S1 Ilmu Komputer',
+                summary: 'Lulusan Ilmu Komputer dengan <strong class="text-zinc-900">rekam jejak terbukti</strong> dalam merancang arsitektur sistem dan <strong class="text-zinc-900">pengembangan fullstack</strong>. Berpengalaman <strong class="text-zinc-900">memimpin tim</strong>, memangkas waktu load sistem hingga 30%, dan membangun <strong class="text-zinc-900">solusi digital skalabel</strong> dari MVP hingga tingkat Enterprise.',
+                about_label: 'Tentang Saya',
+                focus_label: 'Fokus Utama',
+                download_cv: 'Unduh CV',
+                contact_me: 'Hubungi Saya',
+                focus_text: 'Optimasi Arsitektur Database & Solusi Cloud Berkinerja Tinggi',
+                active: 'Aktif',
+                years: 'Tahun',
+                experience_label: 'Pengalaman',
+                education_label: 'Pendidikan',
+                gpa_label: 'IPK',
+                cum_laude: 'Cum Laude',
+                awards_label: 'Penghargaan',
+                research_label: 'Publikasi Riset',
+                indexed: 'Indexed Sinta 2',
+                org_label: 'Kepemimpinan & Organisasi',
+                cert_label: 'Sertifikasi Profesional',
+                career_sub: 'Jejak Rekam Karir',
+                career_title: 'Pengalaman Profesional',
+                career_badge: 'Karir',
+                projects_title: 'Portofolio',
+                projects_sub: 'Proyek Pilihan Resolusi Tinggi',
+                contact_title: 'Mencari Engineer Tangguh?\nAyo Diskusi.',
+                contact_name: 'Nama Lengkap',
+                contact_email_label: 'Email Perusahaan',
+                contact_msg: 'Bagaimana saya bisa membantu perusahaan Anda?',
+                contact_name_ph: 'Budi Santoso',
+                contact_msg_ph: 'Kami memiliki posisi terbuka untuk tim Anda...',
+                contact_send: 'Kirim Pesan',
+                footer: '© 2024 Ridha Fahmi Junaidi · Banjarmasin, ID',
+                stable: 'STABIL',
+                enterprise: 'Enterprise',
+                experience_roles: ['Web Developer', 'Web Developer Intern', 'Coordinator of Teaching Assistants'],
+                experience_descs: [
+                    '<ul class="list-disc pl-4 space-y-1 mt-1 text-sm text-stone-500"><li>Merancang arsitektur MVP 1 <em>hulutalent.id</em> dengan 5 fitur inti</li><li><strong class="text-zinc-900">Meningkatkan efisiensi sistem sebesar 30%</strong> melalui optimasi database relasional dan clean code</li><li><strong class="text-zinc-900">Memangkas waktu penyelesaian bug server-side di bawah 24 jam</strong></li></ul>',
+                    '<ul class="list-disc pl-4 space-y-1 mt-1 text-sm text-stone-500"><li><strong class="text-zinc-900">Memimpin pengembangan end-to-end</strong> sistem manajemen file edukatif (<em>FilesGI</em>)</li><li>Sukses <strong class="text-zinc-900">meningkatkan kecepatan query database hingga 20%</strong></li></ul>',
+                    '<ul class="list-disc pl-4 space-y-1 mt-1 text-sm text-stone-500"><li>Manajemen strategis atas 7 asisten laboratorium</li><li>Membimbing lebih dari 60 mahasiswa ilmu komputer</li><li>Berhasil mengamankan <strong class="text-zinc-900">tingkat keberhasilan pembelajaran di angka 95%</strong></li></ul>'
+                ],
+                project_descs: [
+                    'Membangun MVP 1 platform rekrutmen digital dengan 5 fitur krusial. Merancang ERD untuk mengakomodasi pertumbuhan jutaan baris data, memastikan <strong class="text-zinc-900">skalabilitas tinggi untuk perusahaan Enterprise</strong>.',
+                    'Merancang Learning Management System (LMS) khusus yang mengotomatisasi proses onboarding dan pelatihan lebih dari 500 karyawan di perusahaan Docking.',
+                    'Mengintegrasikan aplikasi Point of Sale (POS) cerdas dan E-Commerce untuk mengotomatisasi inventaris toko ritel dan meminimalisir kesalahan pelaporan keuangan.',
+                    'Sistem manajemen aset digital skalabel. Arsitektur database dirombak total untuk <strong class="text-zinc-900">optimasi read/write kecepatan tinggi</strong>, melayani ribuan file edukatif secara instan.'
+                ],
+                honors: ['Penerima Beasiswa PPA 2019', 'Penerima Beasiswa GenBI 2020', 'Pemenang Pendanaan Talenta Inovasi 2021'],
+                orgs: ['Koordinator Kaderisasi', 'Anggota Divisi Kaderisasi', 'Ketua Pelaksana Program'],
+            },
+            en: {
+                nav_home: 'Home', nav_career: 'Career', nav_projects: 'Projects', nav_contact: 'Contact',
+                role: 'Software Engineer',
+                degree: 'B.Sc. Computer Science',
+                summary: 'Computer Science graduate with a <strong class="text-zinc-900">proven track record</strong> in system architecture and <strong class="text-zinc-900">fullstack development</strong>. Experienced in <strong class="text-zinc-900">leading teams</strong>, reducing system load times by 30%, and delivering <strong class="text-zinc-900">scalable digital solutions</strong> from MVP to Enterprise scale.',
+                about_label: 'About Me',
+                focus_label: 'Current Focus',
+                download_cv: 'Download CV',
+                contact_me: 'Contact Me',
+                focus_text: 'Database Architecture Optimization & High-Performance Cloud Solutions',
+                active: 'Active',
+                years: 'Years',
+                experience_label: 'Experience',
+                education_label: 'Education',
+                gpa_label: 'GPA',
+                cum_laude: 'Cum Laude',
+                awards_label: 'Awards & Honors',
+                research_label: 'Published Research',
+                indexed: 'Indexed Sinta 2',
+                org_label: 'Leadership & Organizations',
+                cert_label: 'Professional Certifications',
+                career_sub: 'Professional Track Record',
+                career_title: 'Work Experience',
+                career_badge: 'Career',
+                projects_title: 'Portfolio',
+                projects_sub: 'High-Impact Selected Projects',
+                contact_title: 'Looking for a solid Engineer?\nLet\'s talk.',
+                contact_name: 'Full Name',
+                contact_email_label: 'Work Email',
+                contact_msg: 'How can I add value to your company?',
+                contact_name_ph: 'John Doe',
+                contact_msg_ph: 'We have an open position on our tech team...',
+                contact_send: 'Send Message',
+                footer: '© 2024 Ridha Fahmi Junaidi · Banjarmasin, ID',
+                stable: 'ONGOING',
+                enterprise: 'Enterprise',
+                experience_roles: ['Web Developer', 'Web Developer Intern', 'Coordinator of Teaching Assistants'],
+                experience_descs: [
+                    '<ul class="list-disc pl-4 space-y-1 mt-1 text-sm text-stone-500"><li>Designed the MVP 1 architecture for <em>hulutalent.id</em> encompassing 5 core features</li><li><strong class="text-zinc-900">Improved system efficiency by 30%</strong> through relational database optimization and clean code</li><li><strong class="text-zinc-900">Slashed server-side bug resolution times to under 24 hours</strong></li></ul>',
+                    '<ul class="list-disc pl-4 space-y-1 mt-1 text-sm text-stone-500"><li><strong class="text-zinc-900">Led the end-to-end development</strong> of an educational file management system (<em>FilesGI</em>)</li><li>Successfully <strong class="text-zinc-900">increased database query speeds by 20%</strong></li></ul>',
+                    '<ul class="list-disc pl-4 space-y-1 mt-1 text-sm text-stone-500"><li>Provided strategic management for 7 laboratory assistants</li><li>Mentored over 60 computer science students</li><li>Secured an <strong class="text-zinc-900">outstanding 95% learning success rate</strong></li></ul>'
+                ],
+                project_descs: [
+                    'Built MVP 1 for a digital recruitment platform with 5 crucial features. Designed an ERD capable of accommodating millions of rows of data, ensuring <strong class="text-zinc-900">high scalability for Enterprise clients</strong>.',
+                    'Engineered a custom Learning Management System (LMS) that automates the onboarding and training process for over 500 employees at a Docking company.',
+                    'Integrated a smart Point of Sale (POS) application with an E-Commerce storefront to automate retail inventory and minimize financial reporting discrepancies.',
+                    'Scalable digital asset management system. Radically overhauled the database architecture for <strong class="text-zinc-900">high-speed read/write optimization</strong>, serving thousands of educational files instantly.'
+                ],
+                honors: ['PPA Scholarship Awardee 2019', 'Bank Indonesia GenBI Scholar 2020', 'Talenta Inovasi Indonesia Funding Winner 2021'],
+                orgs: ['Recruitment Coordinator', 'Recruitment Division Member', 'Event Chairman'],
+            }
+        };
+
+        const portfolioData = {
+            profile: { name: "Ridha Fahmi Junaidi", campus: "Universitas Lambung Mangkurat", gpa: "3.74", journal: "Baby Cry Sound Detection using CNN at jeeemi.org" },
+            skills: ["PHP", "JavaScript", "Python", "Laravel", "React", "HTML", "CSS", "AWS", "IBM Cloud", "SQL", "Tableau", "Git", "Canva"],
+            experience: [
+                { company: "Digitaliz by Yayasan Hasnur Centre", period: "Jan 2023 - Present" },
+                { company: "Digitaliz by Yayasan Hasnur Centre", period: "Aug - Dec 2022" },
+                { company: "Universitas Lambung Mangkurat", period: "2021" }
+            ],
+            projects: [
+                { title: "hulutalent.id", tag: "Enterprise", tech: ["Laravel", "AWS", "SQL", "Redis"], size: "hero", images: ["https://picsum.photos/800/600?random=11", "https://picsum.photos/800/600?random=12"] },
+                { title: "LMS Onboarding Docking", tag: "E-Learning", tech: ["Laravel", "MySQL", "PHP"], size: "second", images: ["https://picsum.photos/800/600?random=21", "https://picsum.photos/800/600?random=22"] },
+                { title: "Online Shop + POS", tag: "Retail", tech: ["PHP", "SQL", "Tailwind"], size: "third", images: ["https://picsum.photos/800/600?random=31", "https://picsum.photos/800/600?random=32"] },
+                { title: "FilesGI", tag: "E-Learning", tech: ["PHP", "Optimized SQL"], size: "fourth", images: ["https://picsum.photos/800/600?random=41", "https://picsum.photos/800/600?random=42"] }
+            ],
+            organizations: [
+                { org: "HIMAKOM ULM", period: "2021-2022" },
+                { org: "GenBI", period: "2020-2021" },
+                { org: "UPTKM FMIPA ULM", period: "2020" }
+            ],
+            certificates: ["IBM DevOps & Software Engineering (Coursera)", "Google IT Automation with Python (Coursera)", "Junior Web Developer (BNSP)", "Dicoding Developer Programs"]
+        };
+
+        let currentLang = localStorage.getItem('portfolio_lang') || null;
+
+        function setLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('portfolio_lang', lang);
+            document.getElementById('lang-modal').classList.remove('show');
+            document.getElementById('lang-flag').textContent = lang === 'id' ? '🇮🇩' : '🇬🇧';
+            document.getElementById('lang-label').textContent = lang.toUpperCase();
+            document.documentElement.lang = lang;
+            renderPage();
+        }
+
+        function toggleLang() {
+            setLang(currentLang === 'id' ? 'en' : 'id');
+        }
+
+        function toggleMobileMenu() {
+            const btn = document.getElementById('hamburger-btn');
+            const menu = document.getElementById('mobile-menu');
+            btn.classList.toggle('open');
+            menu.classList.toggle('open');
+        }
+
+        function closeMobileMenu() {
+            document.getElementById('hamburger-btn').classList.remove('open');
+            document.getElementById('mobile-menu').classList.remove('open');
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function (e) {
+            const btn = document.getElementById('hamburger-btn');
+            const menu = document.getElementById('mobile-menu');
+            if (btn && menu && !btn.contains(e.target) && !menu.contains(e.target)) {
+                closeMobileMenu();
+            }
+        });
+
+        function updateClock() {
+            const now = new Date();
+            const t = now.toLocaleTimeString('en-GB', { timeZone: 'Asia/Makassar', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const el = document.getElementById('local-clock');
+            if (el) el.textContent = t + " WITA";
+        }
+
+        function renderPage() {
+            const L = i18n[currentLang];
+            const grid = document.getElementById('main-grid');
+
+            grid.innerHTML = `
+            <!-- 1. HERO SECTION -->
+            <div id="hero" class="reveal">
+
+                <!-- ONE BIG L-shaped card -->
+                <div class="hero-main-grid">
+
+                    <!-- Top part: Name, Role, Degree, About Me inline -->
+                    <div class="hero-bg-top">
+                        <p class="text-[10px] font-black uppercase tracking-[0.45em] text-amber-600 mb-6 flex items-center gap-3">
+                            <span class="w-10 h-[2px] bg-amber-500"></span>${L.role}
+                        </p>
+                        <h1 class="text-6xl sm:text-7xl lg:text-8xl font-extrabold leading-[0.85] tracking-tighter text-zinc-900 mb-4">
+                            ${portfolioData.profile.name}
+                        </h1>
+                        <p class="text-xl font-medium text-stone-400 serif-italic mb-6">${L.degree}</p>
+                        <div class="flex items-start gap-3 mt-4">
+                            <i data-lucide="sparkles" class="w-4 h-4 text-amber-500 mt-2 flex-shrink-0"></i>
+                            <p class="text-xl md:text-2xl lg:text-3xl leading-snug text-stone-500 font-medium">${L.summary}</p>
+                        </div>
+                    </div>
+
+                    <!-- Bottom-left part: CTA and Socials -->
+                    <div class="hero-bg-bottom-left">
+                        <div class="mt-8"> <!-- the CTA block pushed down via justify-end -->
+                            <div class="flex flex-wrap items-center gap-4">
+                                <!-- Primary CTA -->
+                                <a href="#" class="px-6 py-3.5 bg-zinc-900 text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-zinc-800 transition-colors flex items-center gap-2">
+                                    <i data-lucide="download" class="w-4 h-4"></i>
+                                    ${L.download_cv}
+                                </a>
+                                <!-- Secondary CTA -->
+                                <a href="#" class="px-6 py-3.5 bg-white text-zinc-900 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-stone-50 transition-colors flex items-center gap-2 border border-stone-200 shadow-sm">
+                                    <i data-lucide="mail" class="w-4 h-4"></i>
+                                    ${L.contact_me}
+                                </a>
+                                
+                                <!-- Divider -->
+                                <div class="h-8 w-px bg-stone-300 mx-2 hidden sm:block"></div>
+                                
+                                <!-- Social Links -->
+                                <a href="https://linkedin.com" target="_blank" class="w-11 h-11 rounded-full bg-white flex items-center justify-center border border-stone-200 text-stone-500 hover:text-[#0A66C2] hover:border-[#0A66C2] transition-colors shadow-sm">
+                                    <i data-lucide="linkedin" class="w-5 h-5"></i>
+                                </a>
+                                <a href="https://github.com" target="_blank" class="w-11 h-11 rounded-full bg-white flex items-center justify-center border border-stone-200 text-stone-500 hover:text-zinc-900 hover:border-zinc-900 transition-colors shadow-sm">
+                                    <i data-lucide="github" class="w-5 h-5"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom-right part: Two inset cards sitting outside -->
+                    <div class="hero-inset-cards mt-4">
+                            <!-- Card 1: Focus + clock -->
+                            <div class="hero-inset-card">
+                                <div class="flex justify-between items-start">
+                                    <h4 class="text-[8px] font-black uppercase tracking-widest text-stone-400">${L.focus_label}</h4>
+                                    <div class="w-6 h-6 rounded-full bg-amber-50 flex items-center justify-center">
+                                        <i data-lucide="zap" class="w-3 h-3 text-amber-500"></i>
+                                    </div>
+                                </div>
+                                <p class="text-xs font-bold leading-snug text-zinc-700 my-3">${L.focus_text}</p>
+                                <div class="flex items-center justify-between border-t border-stone-100 pt-2.5">
+                                    <span id="local-clock" class="text-[8px] font-mono font-bold text-stone-400">00:00 WITA</span>
+                                    <span class="flex items-center gap-1 text-[7px] font-black text-emerald-600 uppercase">
+                                        <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></span>${L.active}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Card 2: Years exp -->
+                            <div class="hero-inset-card dark">
+                                <div class="text-4xl font-black text-amber-400 tracking-tighter leading-none">2+</div>
+                                <div>
+                                    <p class="text-[10px] font-bold uppercase tracking-widest text-white mt-3">${L.years}</p>
+                                    <p class="text-[8px] text-white/40 uppercase tracking-widest mt-0.5">${L.experience_label}</p>
+                                    <div class="flex flex-wrap gap-1 mt-3">
+                                        <span class="px-2 py-0.5 bg-white/10 rounded text-[7px] font-bold uppercase text-white/70">Fullstack</span>
+                                        <span class="px-2 py-0.5 bg-white/10 rounded text-[7px] font-bold uppercase text-white/70">DevOps</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                <!-- THIN bottom status bar -->
+                <div class="hero-bar justify-between">
+                    <div class="flex items-center gap-3 flex-1 w-full md:w-auto">
+                        <div class="w-8 h-8 rounded-xl bg-stone-50 flex items-center justify-center flex-shrink-0 border border-stone-200/60">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-amber-600"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <p class="text-[8px] font-black uppercase tracking-widest text-stone-400">Location</p>
+                            <p class="text-xs sm:text-sm font-bold text-zinc-800 truncate">Banjarmasin, Kalsel 🇮🇩</p>
+                        </div>
+                    </div>
+                    <div class="h-6 w-px bg-stone-100 hidden sm:block"></div>
+                    <div class="flex-1 text-center hidden sm:block">
+                        <p class="text-[8px] font-black uppercase tracking-widest text-stone-400">Status</p>
+                        <p class="text-xs font-bold text-emerald-600">Open to Work</p>
+                    </div>
+                    <div class="h-6 w-px bg-stone-100 hidden sm:block"></div>
+                    <div class="flex-1 sm:text-right hidden sm:block">
+                        <p class="text-[8px] font-black uppercase tracking-widest text-stone-400">Stack</p>
+                        <p class="text-[10px] sm:text-xs font-bold text-zinc-700">Laravel · AWS</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 2. WORK EXPERIENCE -->
+            <div id="experience" class="reveal col-full bento-card bg-stone-50/80 border-stone-100">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
+                    <div>
+                        <h3 class="text-[9px] font-black uppercase tracking-widest text-stone-400 mb-3">${L.career_sub}</h3>
+                        <h2 class="text-4xl font-extrabold tracking-tighter text-zinc-900">${L.career_title}</h2>
+                    </div>
+                    <div class="flex items-center gap-2 px-4 py-2 bg-zinc-900 text-white rounded-full text-[10px] font-bold">
+                        <i data-lucide="briefcase" class="w-3 h-3"></i> ${L.career_badge}
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    ${portfolioData.experience.map((exp, i) => `
+                        <div class="p-5 md:p-8 bg-white rounded-[2rem] border border-black/[0.03] flex flex-col justify-between hover:shadow-md transition-all duration-500">
+                            <div>
+                                <div class="flex justify-between items-start mb-6">
+                                    <span class="text-[10px] font-mono text-stone-300 font-bold uppercase tracking-widest">${exp.period}</span>
+                                    <div class="px-2.5 py-1 bg-stone-50 rounded-lg text-[8px] font-bold text-stone-400">${L.stable}</div>
+                                </div>
+                                <h4 class="text-lg md:text-xl font-extrabold leading-tight text-zinc-900">${L.experience_roles[i]}</h4>
+                                <p class="text-[10px] md:text-xs text-amber-600 font-bold mt-1.5 mb-4 uppercase tracking-wider">${exp.company}</p>
+                                <p class="text-xs md:text-sm text-stone-500 leading-relaxed font-medium">${L.experience_descs[i]}</p>
+                            </div>
+                            <div class="mt-8 flex justify-end"><i data-lucide="arrow-right" class="w-4 h-4 text-stone-200"></i></div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+
+            <!-- 3. EDUCATION SECTION -->
+            <div class="reveal edu-grid col-full" style="grid-column: 1 / -1;">
+
+                <!-- Main info -->
+                <div class="bento-card bg-white flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-[9px] font-black uppercase tracking-[0.2em] text-stone-400 mb-6">${L.education_label}</h3>
+                        <h4 class="text-3xl font-extrabold leading-tight tracking-tight text-zinc-900">${portfolioData.profile.campus}</h4>
+                        <p class="text-stone-500 font-medium mt-2">${L.degree}</p>
+                    </div>
+                    <!-- Awards sub-card -->
+                    <div class="bento-card glossy mt-6 p-6">
+                        <h3 class="text-[8px] font-black text-amber-600 uppercase tracking-widest mb-4">${L.awards_label}</h3>
+                        <ul class="space-y-2.5">
+                            ${L.honors.map(h => `<li class="text-xs font-semibold text-zinc-600 flex items-center gap-2.5"><i data-lucide="award" class="w-3.5 h-3.5 text-amber-400 flex-shrink-0"></i>${h}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Research + GPA combined card -->
+                <div class="bento-card bg-stone-50 border-stone-100 flex flex-col justify-between gap-6">
+                    <!-- Research top -->
+                    <div>
+                        <h3 class="text-[9px] font-black text-stone-400 uppercase tracking-widest mb-4">${L.research_label}</h3>
+                        <p class="text-lg font-bold text-zinc-800 leading-snug serif-italic">${portfolioData.profile.journal}</p>
+                        <div class="flex items-center justify-between text-[10px] font-bold text-amber-700 mt-4 border-t border-stone-200 pt-4">
+                            <span>${L.indexed}</span>
+                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                        </div>
+                    </div>
+                    <!-- GPA bottom -->
+                    <div class="bento-card glossy-dark text-white flex items-center justify-between px-6 py-5">
+                        <div>
+                            <h3 class="text-[8px] font-black uppercase tracking-widest opacity-50 mb-1">${L.gpa_label}</h3>
+                            <p class="text-4xl font-black tracking-tighter text-amber-400">${portfolioData.profile.gpa}</p>
+                        </div>
+                        <div class="text-right">
+                            <i data-lucide="graduation-cap" class="w-7 h-7 opacity-20 mb-2 ml-auto"></i>
+                            <span class="px-3 py-1 bg-white/10 rounded-full text-[8px] font-black tracking-widest uppercase block">${L.cum_laude}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. ORGANIZATIONS & CERTS -->
+            <div class="reveal col-8 bento-card bg-white">
+                <div class="flex items-center gap-3 mb-7">
+                    <div class="w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600">
+                        <i data-lucide="users" class="w-4 h-4"></i>
+                    </div>
+                    <h3 class="text-xs font-black uppercase tracking-widest">${L.org_label}</h3>
+                </div>
+                <div class="space-y-5">
+                    ${portfolioData.organizations.map((org, i) => `
+                        <div class="flex justify-between items-start group">
+                            <div>
+                                <p class="text-sm font-bold text-zinc-900 group-hover:text-amber-600 transition-colors">${L.orgs[i]}</p>
+                                <p class="text-xs text-stone-400 mt-0.5">${org.org}</p>
+                            </div>
+                            <span class="text-[9px] font-mono text-stone-300 font-bold">${org.period}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+
+            <div class="reveal col-4 bento-card glossy-dark text-white border-none">
+                <div class="flex items-center gap-3 mb-7">
+                    <div class="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center text-amber-400">
+                        <i data-lucide="medal" class="w-4 h-4"></i>
+                    </div>
+                    <h3 class="text-xs font-black uppercase tracking-widest">${L.cert_label}</h3>
+                </div>
+                <ul class="space-y-4">
+                    ${portfolioData.certificates.map(cert => `
+                        <li class="text-xs flex items-center gap-3 group cursor-default">
+                            <div class="w-1.5 h-1.5 bg-amber-500 rounded-full group-hover:scale-150 transition-transform flex-shrink-0"></div>
+                            <span class="opacity-75 group-hover:opacity-100 font-medium">${cert}</span>
+                        </li>
+                    `).join('')}
+                </ul>
+            </div>
+
+            <!-- 5. TECH STACK -->
+            <div class="reveal col-full bento-card glossy-dark text-white py-7 border-none">
+                <div class="marquee-wrapper">
+                    <div class="marquee-content text-sm font-bold uppercase tracking-[0.25em]">
+                        ${portfolioData.skills.concat(portfolioData.skills).map(s => `
+                            <div class="flex items-center gap-6 opacity-40 hover:opacity-100 transition-opacity cursor-default">
+                                <span>${s}</span>
+                                <div class="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. PORTFOLIO (hierarchy: hulutalent > LMS > POS > FilesGI) -->
+            <div id="projects" class="reveal portfolio-grid" style="grid-column: 1 / -1;">
+                <div class="col-full mb-2" style="grid-column: 1 / -1;">
+                    <h3 class="text-[9px] font-black uppercase tracking-widest text-stone-400 mb-1">${L.projects_sub}</h3>
+                    <h2 class="text-4xl font-extrabold tracking-tighter text-zinc-900">${L.projects_title}</h2>
+                </div>
+
+                <!-- Hulutalent — LARGEST card -->
+                <div onclick="openProjectModal(0)" class="project-hero bento-card border-none overflow-hidden group cursor-pointer relative" style="min-height: 340px; background-image: url('https://picsum.photos/800/600?random=1'); background-size: cover; background-position: center;">
+                    <div class="absolute inset-0 bg-zinc-950/80 group-hover:bg-zinc-950/90 transition-colors duration-500"></div>
+                    <div class="h-full flex flex-col justify-between relative z-10 text-white">
+                        <div class="flex justify-between items-start">
+                            <span class="text-[9px] font-black text-stone-400 uppercase tracking-[0.3em]">${portfolioData.projects[0].tag}</span>
+                            <div class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-amber-500 group-hover:border-amber-500 transition-all duration-500">
+                                <i data-lucide="arrow-up-right" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-4xl md:text-5xl font-extrabold tracking-tight text-white group-hover:text-amber-400 transition-colors leading-tight mb-4">${portfolioData.projects[0].title}</h4>
+                            <p class="text-sm text-stone-300 leading-relaxed mb-6 block md:max-w-md">${L.project_descs[0]}</p>
+                            <div class="flex flex-wrap gap-2">
+                                ${portfolioData.projects[0].tech.map(t => `<span class="px-3 py-1 bg-white/10 border border-white/10 text-stone-200 text-[9px] font-bold rounded-xl backdrop-blur-md">${t}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LMS — second card -->
+                <div onclick="openProjectModal(1)" class="project-second bento-card border-none group cursor-pointer relative overflow-hidden" style="min-height: 340px; background-image: url('https://picsum.photos/800/600?random=2'); background-size: cover; background-position: center;">
+                    <div class="absolute inset-0 bg-stone-900/40 backdrop-blur-sm group-hover:bg-stone-900/60 transition-all duration-500"></div>
+                    <div class="h-full flex flex-col justify-between relative z-10 text-white">
+                        <div class="flex justify-between items-start">
+                            <span class="text-[9px] font-black text-stone-300 uppercase tracking-[0.3em]">${portfolioData.projects[1].tag}</span>
+                            <div class="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-amber-500 group-hover:border-amber-500 transition-all duration-500">
+                                <i data-lucide="arrow-up-right" class="w-4 h-4 text-white"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-2xl md:text-3xl font-extrabold tracking-tight text-white group-hover:text-amber-400 transition-colors leading-tight mb-3 drop-shadow-md">${portfolioData.projects[1].title}</h4>
+                            <p class="text-xs text-stone-200 leading-relaxed mb-5 drop-shadow-md">${L.project_descs[1]}</p>
+                            <div class="flex flex-wrap gap-1.5">
+                                ${portfolioData.projects[1].tech.map(t => `<span class="px-3 py-1 bg-white/10 border border-white/10 text-stone-200 text-[9px] font-bold rounded-xl backdrop-blur-md">${t}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- POS — third card -->
+                <div onclick="openProjectModal(2)" class="project-third bento-card relative overflow-hidden border-none group cursor-pointer text-white" style="background-image: url('https://picsum.photos/400/400?random=3'); background-size: cover; background-position: center;">
+                    <div class="absolute inset-0 bg-stone-900/60 group-hover:bg-stone-900/70 transition-all duration-500"></div>
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-start mb-6">
+                            <span class="text-[9px] font-black text-amber-400 uppercase tracking-[0.3em]">${portfolioData.projects[2].tag}</span>
+                            <div class="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-amber-500 transition-all duration-500">
+                                <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                            </div>
+                        </div>
+                        <h4 class="text-xl font-extrabold tracking-tight text-white group-hover:text-amber-400 transition-colors mb-2">${portfolioData.projects[2].title}</h4>
+                        <p class="text-xs text-stone-300 leading-relaxed mb-4">${L.project_descs[2]}</p>
+                        <div class="flex flex-wrap gap-1.5">
+                            ${portfolioData.projects[2].tech.map(t => `<span class="px-2.5 py-1 bg-white/10 backdrop-blur border border-white/10 text-stone-200 text-[9px] font-bold rounded-lg">${t}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FilesGI — smallest card -->
+                <div onclick="openProjectModal(3)" class="project-fourth bento-card relative overflow-hidden text-white border-none group cursor-pointer" style="background-image: url('https://picsum.photos/400/400?random=4'); background-size: cover; background-position: center;">
+                    <div class="absolute inset-0 bg-stone-900/70 group-hover:bg-stone-900/80 transition-all duration-500"></div>
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-start mb-6">
+                            <span class="text-[9px] font-black text-stone-400 uppercase tracking-[0.3em]">${portfolioData.projects[3].tag}</span>
+                            <div class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-amber-500 group-hover:border-amber-500 transition-all duration-500">
+                                <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                            </div>
+                        </div>
+                        <h4 class="text-xl font-extrabold tracking-tight text-white group-hover:text-amber-400 transition-colors mb-2">${portfolioData.projects[3].title}</h4>
+                        <p class="text-xs text-stone-400 leading-relaxed mb-4 line-clamp-2">${L.project_descs[3]}</p>
+                        <div class="flex flex-wrap gap-1.5">
+                            ${portfolioData.projects[3].tech.map(t => `<span class="px-2.5 py-1 bg-white/10 border border-white/10 backdrop-blur text-stone-300 text-[9px] font-bold rounded-lg">${t}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty 5th slot — can be "View all" -->
+                <div class="project-fifth bento-card bg-stone-100/50 border-dashed border-stone-200 flex flex-col items-center justify-center text-center group cursor-pointer hover:bg-stone-100 transition-all">
+                    <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center mb-3 shadow-sm group-hover:shadow-md transition-all">
+                        <i data-lucide="arrow-right" class="w-5 h-5 text-stone-400"></i>
+                    </div>
+                    <p class="text-xs font-bold text-stone-400 uppercase tracking-widest">More Projects</p>
+                </div>
+            </div>
+
+            <!-- 7. CONTACT -->
+            <div id="contact" class="reveal col-full bento-card bg-white overflow-hidden p-6 md:p-10">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
+                    <div>
+                        <h2 class="text-5xl md:text-6xl serif-italic leading-[0.9] italic mb-8 text-zinc-900">
+                            ${L.contact_title.split('\n').join('<br>')}
+                        </h2>
+                        <p class="text-sm md:text-base text-stone-400 font-medium mb-10">ridhofahmij225@gmail.com</p>
+                        <div class="flex gap-3">
+                            <a href="#" class="w-12 h-12 rounded-full border border-black/5 flex items-center justify-center hover:bg-zinc-950 hover:text-white transition-all shadow-sm"><i data-lucide="github" class="w-5 h-5"></i></a>
+                            <a href="#" class="w-12 h-12 rounded-full border border-black/5 flex items-center justify-center hover:bg-zinc-950 hover:text-white transition-all shadow-sm"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                            <a href="#" class="w-12 h-12 rounded-full border border-black/5 flex items-center justify-center hover:bg-zinc-950 hover:text-white transition-all shadow-sm"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                        </div>
+                    </div>
+                    <form class="space-y-4 bg-stone-50 p-6 md:p-8 rounded-[2rem] border border-black/[0.03]">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-1.5">
+                                <label class="text-[9px] font-black uppercase text-stone-400 ml-1">${L.contact_name}</label>
+                                <input type="text" placeholder="${L.contact_name_ph}" class="w-full bg-white border border-black/5 rounded-xl p-3.5 text-sm outline-none focus:border-amber-400 transition-colors">
+                            </div>
+                            <div class="space-y-1.5">
+                                <label class="text-[9px] font-black uppercase text-stone-400 ml-1">${L.contact_email_label}</label>
+                                <input type="email" placeholder="example@mail.com" class="w-full bg-white border border-black/5 rounded-xl p-3.5 text-sm outline-none focus:border-amber-400 transition-colors">
+                            </div>
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-[9px] font-black uppercase text-stone-400 ml-1">${L.contact_msg}</label>
+                            <textarea rows="4" placeholder="${L.contact_msg_ph}" class="w-full bg-white border border-black/5 rounded-xl p-3.5 text-sm outline-none focus:border-amber-400 transition-colors resize-none"></textarea>
+                        </div>
+                        <button class="w-full py-4 bg-zinc-950 text-white rounded-xl font-bold hover:bg-amber-600 active:scale-[0.98] transition-all flex items-center justify-center gap-3 text-xs uppercase tracking-widest shadow-md">
+                            ${L.contact_send} <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-full text-center py-20 opacity-20 text-[9px] font-black tracking-[0.5em] uppercase">${L.footer}</div>
+        `;
+
+            lucide.createIcons();
+            handleReveal();
+            setInterval(updateClock, 1000);
+            updateClock();
+
+            // Update nav labels
+            document.querySelectorAll('.nav-link[data-key]').forEach(el => {
+                const key = el.dataset.key;
+                if (L[key]) el.textContent = L[key];
+            });
+            // Re-add contact label since it gets overwritten
+            const contactNav = document.querySelector('.nav-link[data-key="nav_contact"]');
+            if (contactNav) contactNav.textContent = L.nav_contact;
+        }
+
+        function handleReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => entry.target.classList.add('active'), index * 80);
+                    }
+                });
+            }, { threshold: 0.08 });
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem('portfolio_lang');
+            if (!saved) {
+                // Show modal
+                const modal = document.getElementById('lang-modal');
+                modal.classList.add('show');
+                lucide.createIcons();
+            } else {
+                setLang(saved);
+            }
+        });
+    </script>
+</body>
+
+</html>
